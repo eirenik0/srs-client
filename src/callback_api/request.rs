@@ -62,7 +62,7 @@ impl SrsCallbackReq {
         if let Some(stream) = &self.stream {
             format!("{}/{}", self.app, stream)
         } else {
-            self.app.to_string()
+            self.app.clone()
         }
     }
 }
