@@ -2,11 +2,11 @@
 name = "srs-client"
 version = "0.2.0"
 description = "Provides bindings for the main functionalities of the SRS"
-authors = ["Serhii Khalymon <serhii@fluxomnia.systems>"]
+authors = ["Serhii Khalymon <serhii.khalymon@pm.me>"]
 edition = "2021"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/fluxomnia-systems/srs-client"
+repository = "https://github.com/eirenik0/srs-client"
 documentation = "https://docs.rs/srs-client"
 keywords = ["SRS", "callback", "API", "client"]
 categories = ["web-programming::http-client"]
@@ -21,10 +21,10 @@ pre-release-replacements = [
 
 [dependencies]
 derive_more = "0.99"
-reqwest = { version = "0.11", features = ["json"] }
+reqwest = { version = "0.12", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 tracing = "0.1"
 url = "2.5"
 
 [dev-dependencies]
-tokio = { version = "1.36", features = ["full"] }
+tokio = { version = "1.40", features = ["full"] }
