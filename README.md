@@ -88,6 +88,8 @@ srs-client = "0.1.0"
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+For maintainers releasing new versions, see [RELEASE.md](RELEASE.md) for detailed release instructions.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

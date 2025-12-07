@@ -27,6 +27,62 @@ doc: cargo.doc
 
 test: cargo.test
 
+#############
+# Release #
+#############
+
+release: release.patch
+
+release.patch:
+	@echo "Creating patch release..."
+	cargo release patch
+
+release.minor:
+	@echo "Creating minor release..."
+	cargo release --minor
+
+release.major:
+	@echo "Creating major release..."
+	cargo release --major
+
+release.dry:
+	@echo "Dry run release (no changes will be made)..."
+	cargo release --dry-run
+
+release.manual: release.check-changes release.update-version release.update-changelog release.commit release.tag release.push
+
+release.check-changes:
+	@echo "Checking for uncommitted changes..."
+	@test -z "$$(git status --porcelain)" || (echo "Error: Working directory is not clean. Commit or stash changes first." && exit 1)
+	@echo "Working directory is clean."
+
+release.update-version:
+	@echo "Updating version..."
+	@read -p "Enter new version (current: $$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version'): " new_version; \
+	cargo set-version $$new_version
+
+release.update-changelog:
+	@echo "Updating changelog..."
+	git-cliff -o CHANGELOG.md --tag $$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
+
+release.commit:
+	@echo "Committing release changes..."
+	git add -A
+	git commit -m "chore: prepare for release"
+
+release.tag:
+	@echo "Creating git tag..."
+	git tag v$$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
+
+release.push:
+	@echo "Pushing to GitHub..."
+	git push origin main --tags
+	@echo "Don't forget to run 'cargo publish' to publish to crates.io"
+
+publish:
+	@echo "Publishing to crates.io..."
+	cargo publish
+
 
 ##################
 # Cargo commands #
@@ -72,5 +128,8 @@ cargo.test:
 # .PHONY section #
 ##################
 
-.PHONY: fmt lint test\
+.PHONY: fmt lint test publish release\
+        release.patch release.minor release.major release.dry release.manual\
+        release.check-changes release.update-version release.update-changelog\
+        release.commit release.tag release.push\
         cargo.fmt cargo.lint cargo.test
